@@ -153,7 +153,9 @@ export default function HprInput() {
             {message.text}
           </div>
         )}
-
+        <div className="px-3 border border-green mx-auto bg-info-subtle">
+          Fill out the form pls
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name" className="form-label fw-bold">
