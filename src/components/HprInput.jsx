@@ -77,6 +77,26 @@ export default function HprInput() {
     setSubmitting(true);
     setMessage({ text: '', type: '' });
 
+    // Helper to generate current timestamp in IST with +05:30 offset
+    const getISTTimestamp = () => {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+
+      const parts = formatter.formatToParts(now);
+      const getPart = (type) => parts.find((p) => p.type === type)?.value;
+
+      return `${getPart('year')}-${getPart('month')}-${getPart('day')}T${getPart('hour')}:${getPart('minute')}:${getPart('second')}+05:30`;
+    };
+
     // Explicitly attach current ISO timestamp so ONLY this row updates its time
     const payload = {
       name: formData.name,
@@ -85,7 +105,8 @@ export default function HprInput() {
       department: formData.department,
       phone_no: formData.phoneNo,
       hpr_id: formData.hprId,
-      updated_at: new Date().toISOString(), // 👈 Sets exact timestamp for this specific row only
+      updated_at: getISTTimestamp(), // 👈 Uses the IST timestamp generator
+      // updated_at: new Date().toISOString(), // 👈 Sets exact timestamp for this specific row only
     };
 
     console.log('Data to be sent/updated in database:', payload);
@@ -154,7 +175,7 @@ export default function HprInput() {
           </div>
         )}
         <div className="px-3 border border-green mx-auto bg-info-subtle">
-          Fill out the form pls
+          Fill out the form plsx
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
